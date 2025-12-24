@@ -52,7 +52,7 @@ ros2 launch room_scanner scanner.launch.py use_rviz:=false
 ros2 launch room_scanner scanner.launch.py use_rtabmap:=false use_octomap:=true
 
 # Minimal RViz config (better performance)
-rviz2 -d ~/mujoco_projects/rviz/scanner_minimal.rviz
+rviz2 -d $(ros2 pkg prefix room_scanner)/share/room_scanner/rviz/scanner_minimal.rviz
 ```
 
 ## Auto-Start on Boot
@@ -141,7 +141,7 @@ ls -l /dev/video*
 ### RViz is slow
 ```bash
 # Use minimal config
-rviz2 -d ~/mujoco_projects/rviz/scanner_minimal.rviz
+rviz2 -d $(ros2 pkg prefix room_scanner)/share/room_scanner/rviz/scanner_minimal.rviz
 
 # Or disable RViz entirely
 ros2 launch room_scanner scanner.launch.py use_rviz:=false

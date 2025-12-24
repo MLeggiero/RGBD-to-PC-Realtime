@@ -4,19 +4,14 @@ Starts RealSense camera, RTABMap, and RViz2
 """
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.conditions import IfCondition
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-import os
-from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
-    # Package directories
-    room_scanner_dir = get_package_share_directory('room_scanner')
 
     # Launch arguments
     use_rviz = LaunchConfiguration('use_rviz')
@@ -72,6 +67,7 @@ def generate_launch_description():
             ('rgb/image', '/camera/color/image_raw'),
             ('rgb/camera_info', '/camera/color/camera_info'),
             ('depth/image', '/camera/depth/image_rect_raw'),
+            ('depth/camera_info', '/camera/depth/camera_info'),
         ],
         arguments=['-d'],  # Delete previous database on start
         condition=IfCondition(use_rtabmap)
@@ -88,6 +84,7 @@ def generate_launch_description():
             ('rgb/image', '/camera/color/image_raw'),
             ('rgb/camera_info', '/camera/color/camera_info'),
             ('depth/image', '/camera/depth/image_rect_raw'),
+            ('depth/camera_info', '/camera/depth/camera_info'),
         ],
         condition=IfCondition(use_rtabmap)
     )
@@ -111,19 +108,10 @@ def generate_launch_description():
         condition=IfCondition(use_octomap)
     )
 
-    # Static transform from camera_link to camera_depth_optical_frame
-    # This is needed if not provided by RealSense driver
-    static_tf_camera = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='camera_base_to_link',
-        arguments=['0', '0', '0', '0', '0', '0', 'camera_link', 'camera_color_optical_frame']
-    )
-
     # RViz2 for visualization
     rviz_config_file = PathJoinSubstitution([
         FindPackageShare('room_scanner'),
-        '..', '..', '..', '..', 'rviz',
+        'rviz',
         'scanner_config.rviz'
     ])
 

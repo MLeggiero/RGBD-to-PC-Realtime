@@ -88,11 +88,11 @@ source install/setup.bash
 ### Quick Start (Manual)
 
 ```bash
-# Terminal 1: Start the camera and mapping
+# Start the full system (camera + mapping + RViz)
 ros2 launch room_scanner scanner.launch.py
 
-# Terminal 2: Start RViz2 (if not auto-launched)
-ros2 run rviz2 rviz2 -d ~/mujoco_projects/rviz/scanner_config.rviz
+# Or without RViz (headless mode)
+ros2 launch room_scanner scanner.launch.py use_rviz:=false
 ```
 
 ### Auto-Start on Boot
